@@ -3,7 +3,7 @@ Type: Package
 Title: Session Verification for Shiny Apps
 Version: 0.1.0
 Author: Your Name
-Maintainer: asmol001@ucr.edu
+Maintainer: Aleksandr Smolin <asmol001@ucr.edu>
 Description: Provides a session verification module for Shiny apps.
 License: GPL-3
 Encoding: UTF-8
