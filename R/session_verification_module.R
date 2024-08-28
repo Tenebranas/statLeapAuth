@@ -1,3 +1,22 @@
+library(shiny)
+library(jsonlite)
+library(httr)
+
+loadConfig <- function() {
+  cat("Starting loadConfig function...\n")
+  
+  config_path <- system.file("www/config.json", package = "statLeapAuth")
+  cat("system.file returned path:", config_path, "\n")
+  
+  if (config_path == "") {
+    stop("Config file not found.")
+  }
+  
+  config <- fromJSON(config_path)
+  cat("Config loaded successfully.\n")
+  return(config)
+}
+
 sessionVerificationUI <- function(id) {
   ns <- NS(id)
   tagList(
@@ -8,25 +27,21 @@ sessionVerificationUI <- function(id) {
 
 sessionVerificationServer <- function(id, main_ui_function) {
   moduleServer(id, function(input, output, session) {
-    
-    # Load the configuration (assuming loadConfig is already defined)
     config <- loadConfig()
-    server_url <- config$serverUrl  # Get the server URL from the config
+    server_url <- config$serverUrl
     
-    # Reactive value to track verification status
-    verification_status <- reactiveVal("pending") # pending, success, or failed
+    verification_status <- reactiveVal("pending")
     
     observeEvent(input$session_id, {
       sessionId <- input$session_id
-      userId <- input$user_id  # Assume you get the userId from the postMessage event
+      userId <- input$user_id
       
-      # Make a request to verify the session
       verification_result <- tryCatch({
-        httr::GET(
+        GET(
           url = paste0(server_url, "/verify-session"),
-          httr::add_headers(
+          add_headers(
             Authorization = paste("Bearer", sessionId),
-            `x-user-id` = userId  # Send the userId in the headers or body
+            `x-user-id` = userId
           )
         )
       }, error = function(e) {
@@ -40,7 +55,6 @@ sessionVerificationServer <- function(id, main_ui_function) {
       }
     })
     
-    # UI for verification status
     output$verification_status <- renderUI({
       if (verification_status() == "pending") {
         tags$p("Verifying session, please wait...", style = "color: blue;")
@@ -49,13 +63,11 @@ sessionVerificationServer <- function(id, main_ui_function) {
       }
     })
     
-    # Conditional main UI based on verification status
     output$main_ui <- renderUI({
       if (verification_status() == "success") {
-        # Call the provided main UI function
         main_ui_function()
       } else if (verification_status() == "failed") {
-        Sys.sleep(2)  # Optional: Delay to allow the user to see the failure message
+        Sys.sleep(2)
         stopApp("Session verification failed.")
       }
     })
