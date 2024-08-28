@@ -1,3 +1,11 @@
+sessionVerificationUI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    uiOutput(ns("verification_status")),
+    uiOutput(ns("main_ui"))
+  )
+}
+
 sessionVerificationServer <- function(id, main_ui_function) {
   moduleServer(id, function(input, output, session) {
     
