@@ -1,0 +1,8 @@
+{
+  "trustedOrigins": [
+    "https://yourmainsite.com",
+    "http://localhost",
+    "http://127.0.0.1"
+  ],
+  "serverUrl": "https://us-central1-statleaptest.cloudfunctions.net/api"
+}
