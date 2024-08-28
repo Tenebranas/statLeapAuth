@@ -4,7 +4,7 @@ library(httr)
 
 loadConfig <- function() {
   cat("Starting loadConfig function...\n")
-  
+  library(jsonlite)
   config_path <- system.file("www/config.json", package = "statLeapAuth")
   cat("system.file returned path:", config_path, "\n")
   
