@@ -8,3 +8,4 @@ Description: Provides a session verification module for Shiny apps.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports: jsonlite, shiny, httr
